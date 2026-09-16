@@ -2,75 +2,28 @@
   "ontology": {
     "id": "solve",
     "label": "Issue Solving Ontology",
-    "version": "1.1",
+    "version": "1.2",
     "namespace": "https://bonsai.github.io/solve/ontology#",
     "concepts": {
       "Issue": {
         "description": "解決対象となる課題",
-        "properties": {
-          "id": "string",
-          "title": "string",
-          "description": "string",
-          "status": "Status"
-        }
+        "properties": { "id": "string", "title": "string", "description": "string", "status": "Status" }
       },
       "Action": {
         "description": "Issueに対して実行する意図的な操作",
-        "properties": {
-          "id": "string",
-          "actor": "Agent",
-          "skill": "Skill",
-          "input": "any",
-          "output": "any"
-        }
+        "properties": { "id": "string", "actor": "Agent", "skill": "Skill", "input": "any", "output": "any" }
       },
       "Event": {
         "description": "Actionまたは外部要因によって発生した出来事",
-        "properties": {
-          "id": "string",
-          "type": "string",
-          "actor": "Agent",
-          "action": "Action",
-          "timestamp": "datetime",
-          "result": "any"
-        }
+        "properties": { "id": "string", "type": "string", "actor": "Agent", "action": "Action", "timestamp": "datetime", "result": "any" }
       },
       "Status": {
         "description": "Issueの現在の状態",
-        "values": [
-          "open",
-          "understood",
-          "planned",
-          "executing",
-          "implemented",
-          "verified",
-          "solved"
-        ]
+        "values": ["open", "understood", "planned", "executing", "implemented", "verified", "solved"]
       },
       "Skill": {
         "description": "AgentがActionを実行するために持つ能力",
-        "properties": {
-          "id": "string",
-          "name": "string",
-          "description": "string",
-          "input": "any",
-          "output": "any"
-        },
-        "instances": {
-          "canon": {
-            "name": "Canon",
-            "description": "正本を特定し、重複した定義や不要なファイル作成を避け、正本への変更と参照関係を追跡・検証する能力",
-            "principles": [
-              "canonical sourceを先に探す",
-              "むやみにファイルを作らない",
-              "作るなら参照・利用箇所を追跡する",
-              "canonical sourceとderived artifactを区別する",
-              "変更はcanonical sourceから行う",
-              "参照を壊さない"
-            ],
-            "source": "bonsai/canon"
-          }
-        }
+        "properties": { "id": "string", "name": "string", "description": "string", "input": "any", "output": "any" }
       }
     },
     "relations": {
@@ -81,6 +34,14 @@
       "causes": { "domain": "Event", "range": "Status" },
       "targets": { "domain": "Action", "range": "Issue" },
       "precedes": { "domain": "Event", "range": "Event" }
+    },
+    "skills": {
+      "canon": {
+        "description": "正本を探し、重複を避け、正本と派生物を区別し、正本から変更し、参照と影響を追跡する"
+      },
+      "solve": {
+        "description": "曖昧な依頼から意図と完了条件を定義し、Issueを理解・計画・実行・検証し、Eventを観測しながらSolvedへ導く"
+      }
     },
     "status_machine": {
       "transitions": [
@@ -94,11 +55,7 @@
     },
     "core_pattern": {
       "Issue": { "has_status": "Status" },
-      "Action": {
-        "targets": "Issue",
-        "uses_skill": "Skill",
-        "produces": "Event"
-      },
+      "Action": { "targets": "Issue", "uses_skill": "Skill", "produces": "Event" },
       "Event": { "causes": "Status" },
       "Skill": { "enables": "Action" }
     }
