@@ -1,0 +1,58 @@
+solve:
+  definition: "Issueを解き、完了状態へ到達するためのプロセス"
+
+  input:
+    type: issue
+    definition: "Agentが考え、解決すべき具体的な課題"
+
+  agent:
+    definition: "Issueについて考え、Solveし、実際に稼働する主体"
+    responsibilities:
+      - think
+      - solve
+      - act
+      - verify
+      - update_state
+
+  goal:
+    definition: "完了状態"
+    role: "何をもってIssueを完了とするかを定義する"
+
+  state:
+    definition: "現在状態"
+    role: "現在の確定事項、未確定事項、不確実性、進捗を保持する"
+    principle: "曖昧さを保持し、Solveの中で判断可能な状態まで減らす"
+
+  process:
+    - observe
+    - interpret
+    - clarify
+    - parameterize
+    - define_goal
+    - assess_state
+    - think
+    - solve
+    - act
+    - verify
+    - update_state
+
+  transition:
+    from: current_state
+    action: agent_action
+    to: updated_state
+
+  completion:
+    condition: "updated_state satisfies goal"
+    result: "issue_done"
+
+  loop:
+    until: completion
+    cycle: "Issue → Think → Solve → Act → Verify → State Update"
+
+  principle:
+    - "Goalは完了状態、Stateは現在状態"
+    - "Issueは解くべき具体的な課題"
+    - "AgentはIssueについて考え、Solveし、実際に稼働する主体"
+    - "Solveは曖昧さを減らし、完了状態へ到達するプロセス"
+    - "曖昧さをゼロにするのではなく、判断可能な状態まで減らす"
+    - "解決とはDone StateへのState Transitionである"
