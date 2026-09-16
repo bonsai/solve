@@ -1,0 +1,91 @@
+{
+  "ontology": {
+    "id": "solve",
+    "label": "Issue Solving Ontology",
+    "version": "1.0",
+    "namespace": "https://bonsai.github.io/solve/ontology#",
+    "concepts": {
+      "Issue": {
+        "description": "解決対象となる課題",
+        "properties": {
+          "id": "string",
+          "title": "string",
+          "description": "string",
+          "status": "Status"
+        }
+      },
+      "Action": {
+        "description": "Issueに対して実行する意図的な操作",
+        "properties": {
+          "id": "string",
+          "actor": "Agent",
+          "skill": "Skill",
+          "input": "any",
+          "output": "any"
+        }
+      },
+      "Event": {
+        "description": "Actionまたは外部要因によって発生した出来事",
+        "properties": {
+          "id": "string",
+          "type": "string",
+          "actor": "Agent",
+          "action": "Action",
+          "timestamp": "datetime",
+          "result": "any"
+        }
+      },
+      "Status": {
+        "description": "Issueの現在の状態",
+        "values": [
+          "open",
+          "understood",
+          "planned",
+          "executing",
+          "implemented",
+          "verified",
+          "solved"
+        ]
+      },
+      "Skill": {
+        "description": "AgentがActionを実行するために持つ能力",
+        "properties": {
+          "id": "string",
+          "name": "string",
+          "description": "string",
+          "input": "any",
+          "output": "any"
+        }
+      }
+    },
+    "relations": {
+      "has_status": { "domain": "Issue", "range": "Status" },
+      "performs": { "domain": "Agent", "range": "Action" },
+      "uses_skill": { "domain": "Action", "range": "Skill" },
+      "produces": { "domain": "Action", "range": "Event" },
+      "causes": { "domain": "Event", "range": "Status" },
+      "targets": { "domain": "Action", "range": "Issue" },
+      "precedes": { "domain": "Event", "range": "Event" }
+    },
+    "status_machine": {
+      "transitions": [
+        { "action": "understand", "from": "open", "to": "understood" },
+        { "action": "plan", "from": "understood", "to": "planned" },
+        { "action": "execute", "from": "planned", "to": "executing" },
+        { "action": "implement", "from": "executing", "to": "implemented" },
+        { "action": "verify", "from": "implemented", "to": "verified" },
+        { "action": "solve", "from": "verified", "to": "solved" }
+      ]
+    },
+    "core_pattern": {
+      "Issue": { "has_status": "Status" },
+      "Action": {
+        "targets": "Issue",
+        "uses_skill": "Skill",
+        "produces": "Event"
+      },
+      "Event": { "causes": "Status" },
+      "Skill": { "enables": "Action" }
+    }
+  }
+}
