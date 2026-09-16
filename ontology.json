@@ -2,7 +2,7 @@
   "ontology": {
     "id": "solve",
     "label": "Issue Solving Ontology",
-    "version": "1.0",
+    "version": "1.1",
     "namespace": "https://bonsai.github.io/solve/ontology#",
     "concepts": {
       "Issue": {
@@ -55,6 +55,21 @@
           "description": "string",
           "input": "any",
           "output": "any"
+        },
+        "instances": {
+          "canon": {
+            "name": "Canon",
+            "description": "正本を特定し、重複した定義や不要なファイル作成を避け、正本への変更と参照関係を追跡・検証する能力",
+            "principles": [
+              "canonical sourceを先に探す",
+              "むやみにファイルを作らない",
+              "作るなら参照・利用箇所を追跡する",
+              "canonical sourceとderived artifactを区別する",
+              "変更はcanonical sourceから行う",
+              "参照を壊さない"
+            ],
+            "source": "bonsai/canon"
+          }
         }
       }
     },
